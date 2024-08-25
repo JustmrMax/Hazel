@@ -22,7 +22,7 @@ project "Hazel"
 	pchheader "hzprh.h"
 	pchsource "Hazel/src/hzpch.cpp"
 
-	files
+	files 
 	{
 		"%{prj.name}/src/**.h",
 		"%{prj.name}/src/**.cpp"
