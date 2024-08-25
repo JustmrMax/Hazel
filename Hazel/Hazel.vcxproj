@@ -77,7 +77,6 @@
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <ClCompile>
       <PrecompiledHeader>NotUsing</PrecompiledHeader>
-      <PrecompiledHeaderFile>hzprh.h</PrecompiledHeaderFile>
       <WarningLevel>Level3</WarningLevel>
       <PreprocessorDefinitions>HZ_PLATFORM_WINDOWS;HZ_BUILD_DLL;HZ_DEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <AdditionalIncludeDirectories>src;vendor\spdlog\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
@@ -90,6 +89,7 @@
     <Link>
       <SubSystem>Windows</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
+      <AdditionalDependencies>opengl32.lib;%(AdditionalDependencies)</AdditionalDependencies>
       <ImportLibrary>..\bin\Debug-windows-x86_64\Hazel\Hazel.lib</ImportLibrary>
     </Link>
     <PostBuildEvent>
@@ -99,7 +99,6 @@
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
     <ClCompile>
       <PrecompiledHeader>NotUsing</PrecompiledHeader>
-      <PrecompiledHeaderFile>hzprh.h</PrecompiledHeaderFile>
       <WarningLevel>Level3</WarningLevel>
       <PreprocessorDefinitions>HZ_PLATFORM_WINDOWS;HZ_BUILD_DLL;HZ_RELEASE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <AdditionalIncludeDirectories>src;vendor\spdlog\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
@@ -116,6 +115,7 @@
       <SubSystem>Windows</SubSystem>
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
       <OptimizeReferences>true</OptimizeReferences>
+      <AdditionalDependencies>opengl32.lib;%(AdditionalDependencies)</AdditionalDependencies>
       <ImportLibrary>..\bin\Release-windows-x86_64\Hazel\Hazel.lib</ImportLibrary>
     </Link>
     <PostBuildEvent>
@@ -125,7 +125,6 @@
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Dist|x64'">
     <ClCompile>
       <PrecompiledHeader>NotUsing</PrecompiledHeader>
-      <PrecompiledHeaderFile>hzprh.h</PrecompiledHeaderFile>
       <WarningLevel>Level3</WarningLevel>
       <PreprocessorDefinitions>HZ_PLATFORM_WINDOWS;HZ_BUILD_DLL;HZ_DIST;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <AdditionalIncludeDirectories>src;vendor\spdlog\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
@@ -142,6 +141,7 @@
       <SubSystem>Windows</SubSystem>
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
       <OptimizeReferences>true</OptimizeReferences>
+      <AdditionalDependencies>opengl32.lib;%(AdditionalDependencies)</AdditionalDependencies>
       <ImportLibrary>..\bin\Dist-windows-x86_64\Hazel\Hazel.lib</ImportLibrary>
     </Link>
     <PostBuildEvent>
@@ -164,6 +164,14 @@
     <ClCompile Include="src\Hazel\Application.cpp" />
     <ClCompile Include="src\Hazel\Log.cpp" />
     <ClCompile Include="src\hzprh.cpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="vendor\GLFW\include" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="vendor\GLFW\GLFW.vcxproj">
+      <Project>{154B857C-0182-860D-AA6E-6C109684020F}</Project>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

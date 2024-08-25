@@ -9,7 +9,16 @@ workspace "Hazel"
 	}
 
 
-outputdir = "%{cfg.buildcfg}-%{cfg.system}-%{cfg.architecture}/"		
+outputdir = "%{cfg.buildcfg}-%{cfg.system}-%{cfg.architecture}/"	
+
+
+-- Include directories relative to this root folder (solution directory)
+IncludeDir = {}
+IncludeDir["GLFW"] = "Hazel/vendor/GLFW/include"
+
+-- GLFW Project
+include "Hazel/vendor/GLFW"
+
 
 project "Hazel"
 	location "Hazel"
@@ -19,13 +28,20 @@ project "Hazel"
 	targetdir ("bin/" .. outputdir .. "/%{prj.name}")
 	objdir ("bin-int/" .. outputdir .. "/%{prj.name}")
 
-	pchheader "hzprh.h"
-	pchsource "Hazel/src/hzpch.cpp"
+	-- pchheader "hzprh.h"
+	-- pchsource "%{prj.name}/src/hzpch.cpp"
 
 	files 
 	{
 		"%{prj.name}/src/**.h",
-		"%{prj.name}/src/**.cpp"
+		"%{prj.name}/src/**.cpp",
+		"%{IncludeDir.GLFW}"
+	}
+
+	links
+	{
+		"GLFW",
+		"opengl32.lib"
 	}
 
 	includedirs
