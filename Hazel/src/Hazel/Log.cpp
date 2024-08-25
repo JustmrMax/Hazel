@@ -1,4 +1,5 @@
 #include "Log.h"
+#include "hzprh.h"
 
 #include "spdlog/sinks/stdout_color_sinks.h"
 
