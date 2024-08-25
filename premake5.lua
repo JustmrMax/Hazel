@@ -34,8 +34,7 @@ project "Hazel"
 	files 
 	{
 		"%{prj.name}/src/**.h",
-		"%{prj.name}/src/**.cpp",
-		"%{IncludeDir.GLFW}"
+		"%{prj.name}/src/**.cpp"
 	}
 
 	links
@@ -47,7 +46,8 @@ project "Hazel"
 	includedirs
 	{
 		"%{prj.name}/src",
-		"%{prj.name}/vendor/spdlog/include"
+		"%{prj.name}/vendor/spdlog/include",
+		"%{IncludeDir.GLFW}"
 	}
 
 	filter "system:windows"

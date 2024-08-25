@@ -1,68 +1,60 @@
 <?xml version="1.0" encoding="utf-8"?>
 <Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <ItemGroup>
-    <Filter Include="src">
-      <UniqueIdentifier>{2DAB880B-99B4-887C-2230-9F7C8E38947C}</UniqueIdentifier>
+    <Filter Include="Hazel">
+      <UniqueIdentifier>{99294D0D-053E-75BE-CEBF-181E3A9371EF}</UniqueIdentifier>
     </Filter>
-    <Filter Include="src\Hazel">
-      <UniqueIdentifier>{F0370AB3-5CA2-BE29-A5E0-6FCF118A9C7E}</UniqueIdentifier>
+    <Filter Include="Hazel\Events">
+      <UniqueIdentifier>{5DEF92FE-4952-22A3-F2D7-5A59DE19EE25}</UniqueIdentifier>
     </Filter>
-    <Filter Include="src\Hazel\Events">
-      <UniqueIdentifier>{D495B311-C08E-D263-E9C0-B7E8D518B26F}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="vendor">
-      <UniqueIdentifier>{B3738122-9F15-ACF8-88D0-BF4C74113349}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="vendor\GLFW">
-      <UniqueIdentifier>{D27667C1-3E2C-E0B6-C720-DA8D33D5D6BA}</UniqueIdentifier>
+    <Filter Include="Hazel\Platforms">
+      <UniqueIdentifier>{20847270-8C0F-E034-9520-6329012B3C35}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="src\Hazel.h">
-      <Filter>src</Filter>
-    </ClInclude>
+    <ClInclude Include="src\Hazel.h" />
     <ClInclude Include="src\Hazel\Application.h">
-      <Filter>src\Hazel</Filter>
+      <Filter>Hazel</Filter>
     </ClInclude>
     <ClInclude Include="src\Hazel\Core.h">
-      <Filter>src\Hazel</Filter>
+      <Filter>Hazel</Filter>
     </ClInclude>
     <ClInclude Include="src\Hazel\EntryPoint.h">
-      <Filter>src\Hazel</Filter>
+      <Filter>Hazel</Filter>
     </ClInclude>
     <ClInclude Include="src\Hazel\Events\ApplicationEvent.h">
-      <Filter>src\Hazel\Events</Filter>
+      <Filter>Hazel\Events</Filter>
     </ClInclude>
     <ClInclude Include="src\Hazel\Events\Event.h">
-      <Filter>src\Hazel\Events</Filter>
+      <Filter>Hazel\Events</Filter>
     </ClInclude>
     <ClInclude Include="src\Hazel\Events\KeyEvent.h">
-      <Filter>src\Hazel\Events</Filter>
+      <Filter>Hazel\Events</Filter>
     </ClInclude>
     <ClInclude Include="src\Hazel\Events\MouseEvent.h">
-      <Filter>src\Hazel\Events</Filter>
+      <Filter>Hazel\Events</Filter>
     </ClInclude>
     <ClInclude Include="src\Hazel\Log.h">
-      <Filter>src\Hazel</Filter>
+      <Filter>Hazel</Filter>
     </ClInclude>
-    <ClInclude Include="src\hzprh.h">
-      <Filter>src</Filter>
+    <ClInclude Include="src\Hazel\Platforms\WindowsWindow.h">
+      <Filter>Hazel\Platforms</Filter>
     </ClInclude>
+    <ClInclude Include="src\Hazel\Window.h">
+      <Filter>Hazel</Filter>
+    </ClInclude>
+    <ClInclude Include="src\hzprh.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\Hazel\Application.cpp">
-      <Filter>src\Hazel</Filter>
+      <Filter>Hazel</Filter>
     </ClCompile>
     <ClCompile Include="src\Hazel\Log.cpp">
-      <Filter>src\Hazel</Filter>
+      <Filter>Hazel</Filter>
     </ClCompile>
-    <ClCompile Include="src\hzprh.cpp">
-      <Filter>src</Filter>
+    <ClCompile Include="src\Hazel\Platforms\WindowWindows.cpp">
+      <Filter>Hazel\Platforms</Filter>
     </ClCompile>
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="vendor\GLFW\include">
-      <Filter>vendor\GLFW</Filter>
-    </None>
+    <ClCompile Include="src\hzprh.cpp" />
   </ItemGroup>
 </Project>
