@@ -4,7 +4,7 @@
 #include "Events/MouseEvent.h"
 #include "Log.h"
 
-#include <GLFW/glfw3.h>
+#include <Glad/glad.h>
 
 namespace Hazel
 {
