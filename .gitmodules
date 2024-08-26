@@ -4,3 +4,4 @@
 [submodule "Hazel/vendor/GLFW"]
 	path = Hazel/vendor/GLFW
 	url = https://github.com/TheCherno/glfw
+	ignore = dirty
