@@ -1,4 +1,4 @@
-#include "hzprh.h"
+#include "hzpch.h"
 #include "Application.h"
 
 #include "Events/MouseEvent.h"
@@ -22,10 +22,16 @@ namespace Hazel
 
 	void Application::OnEvent(Event& event)
 	{
-		HZ_CORE_TRACE(event.ToString());
-
 		EventDispatcher dispatcher(event);
 		dispatcher.Dispatch<WindowCloseEvent>(BIND_EVENT_FN(OnWindowClose));
+
+		for (auto it = m_LayerStack.end(); it != m_LayerStack.begin();)
+		{
+			(*--it)->OnEvent(event);
+
+			if (event.IsHandled() )
+				break;
+		}
 	}
 
 	void Application::Run()
@@ -35,8 +41,21 @@ namespace Hazel
 			glClearColor(1, 0, 1, 1);
 			glClear(GL_COLOR_BUFFER_BIT);
 
+			for (Layer* layer : m_LayerStack)
+				layer->OnUpdate();
+
 			m_Window->OnUpdate();
 		}
+	}
+
+	void Application::PushLayer(Layer* layer)
+	{
+		m_LayerStack.PushLayer(layer);
+	}
+
+	void Application::PushOverlay(Layer* overlay)
+	{
+		m_LayerStack.PushOverlay(overlay);
 	}
 
 	bool Application::OnWindowClose(WindowCloseEvent& event)

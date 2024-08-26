@@ -1,6 +1,6 @@
 #pragma once
 
-#include "hzprh.h"
+#include "hzpch.h"
 #include "Events/Event.h"
 
 #include "Core.h"
