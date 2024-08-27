@@ -57,7 +57,7 @@ namespace Hazel
 					WindowData& data = *(WindowData*)glfwGetWindowUserPointer(window);
 					KeyPressedEvent e(key, 0);
 					
-					data.EventCallBack(e);
+					data.EventCallBack(e); 
 					break;
 				}
 

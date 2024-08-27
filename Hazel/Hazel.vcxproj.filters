@@ -43,13 +43,15 @@
     <ClInclude Include="src\Hazel\Log.h">
       <Filter>Hazel</Filter>
     </ClInclude>
-    <ClInclude Include="src\Hazel\Platforms\WindowsWindow.h">
+    <ClInclude Include="src\Hazel\Platforms\Windows\WindowsWindow.h">
       <Filter>Hazel\Platforms</Filter>
     </ClInclude>
     <ClInclude Include="src\Hazel\Window.h">
       <Filter>Hazel</Filter>
     </ClInclude>
     <ClInclude Include="src\hzpch.h" />
+    <ClInclude Include="vendor\imgui\backends\imgui_impl_glfw.h" />
+    <ClInclude Include="src\Hazel\Platforms\OpenGL\ImGuiOpenGLRenderer.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\Hazel\Application.cpp">
@@ -64,9 +66,11 @@
     <ClCompile Include="src\Hazel\Log.cpp">
       <Filter>Hazel</Filter>
     </ClCompile>
-    <ClCompile Include="src\Hazel\Platforms\WindowWindows.cpp">
+    <ClCompile Include="src\Hazel\Platforms\Windows\WindowWindows.cpp">
       <Filter>Hazel\Platforms</Filter>
     </ClCompile>
     <ClCompile Include="src\hzpch.cpp" />
+    <ClCompile Include="vendor\imgui\backends\imgui_impl_glfw.cpp" />
+    <ClCompile Include="src\Hazel\Platforms\OpenGL\ImGuiOpenGLRenderer.cpp" />
   </ItemGroup>
 </Project>
