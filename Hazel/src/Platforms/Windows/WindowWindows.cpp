@@ -35,7 +35,7 @@ namespace Hazel
 			// TODO: glfwTerminate on system shutdown
 
 			int succsess = glfwInit();	
-			HZ_CORE_ASSERT(success, "Could not initialize GLFW!");
+			HZ_CORE_ASSERT(succsess, "Could not initialize GLFW!");
 
 			s_GLFWInitialized = true;
 		}
@@ -81,6 +81,14 @@ namespace Hazel
 					break;
 				}
 				}
+			}
+		);
+
+		glfwSetCharCallback(m_Window, [](GLFWwindow* window, unsigned int keycode)
+			{
+				WindowData& data = *(WindowData*)glfwGetWindowUserPointer(window);
+				KeyTypedEvent e(keycode);
+				data.EventCallBack(e);
 			}
 		);
 

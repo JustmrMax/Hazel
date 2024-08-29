@@ -20,6 +20,7 @@ public:
 SandBox::SandBox()
 {
 	PushLayer(new ExampleLayer());
+	PushLayer(new Hazel::ImGuiLayer());
 }
 
 SandBox::~SandBox()
