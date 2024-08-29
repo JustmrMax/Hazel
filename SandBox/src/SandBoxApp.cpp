@@ -1,19 +1,33 @@
 #include "SandBoxApp.h"
 
+#include "glm/mat4x4.hpp"
+
 class ExampleLayer : public Hazel::Layer
 {
 public:
 	ExampleLayer()
-		: Layer("Example") {}
-
-	void OnUpdate() override
+		: Layer("Example")
 	{
-		HZ_INFO("ExampleLayer::Update");
+		glm::mat4x4 projectionMatrix = glm::mat4x4();
+		int x;
 	}
 
-	void OnEvent(Hazel::Event& event) override
+	void OnUpdate()
 	{
-		HZ_CORE_TRACE(event.ToString());
+		if (Hazel::Input::IsKeyPressed(HZ_KEY_TAB))
+			HZ_TRACE("Tab key is Pressed!");
+
+
+	}
+
+	void OnEvent(Hazel::Event& event)
+	{
+		// HZ_CORE_TRACE(event.ToString());
+		if (event.GetEventType() == Hazel::EventType::KeyPressed)
+		{
+			Hazel::KeyPressedEvent& e = (Hazel::KeyPressedEvent&)event;
+			HZ_TRACE("{0}", (char)e.GetKeyCode());
+		}
 	}
 };
 
