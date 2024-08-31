@@ -10,9 +10,7 @@ workspace "Hazel"
 		"Dist"
 	}
 
-
 outputdir = "%{cfg.buildcfg}-%{cfg.system}-%{cfg.architecture}/"	
-
 
 -- Include directories relative to this root folder (solution directory)
 IncludeDir = {}
@@ -31,15 +29,21 @@ include "Hazel/vendor/imgui"
 
 project "Hazel"
 	location "Hazel"
-	kind "SharedLib"
-	staticruntime "off"
+	kind "StaticLIb"
+	staticruntime "on"
 	language "C++"
+	cppdialect "C++17"
 
 	targetdir ("bin/" .. outputdir .. "/%{prj.name}")
 	objdir ("bin-int/" .. outputdir .. "/%{prj.name}")
 
 	pchheader "hzpch.h"
 	pchsource "%{prj.name}/src/hzpch.cpp"
+
+	defines
+	{
+		_CRT_NO_WARNINGS
+	}
 
 	files 
 	{
@@ -68,7 +72,6 @@ project "Hazel"
 	}
 
 	filter "system:windows"
-		cppdialect "C++17"
 		systemversion "latest"
 
 		defines
@@ -77,8 +80,6 @@ project "Hazel"
 			"HZ_BUILD_DLL",
 			"GLFW_INCLUDE_NONE"
 		}
-
-		postbuildcommands {("{COPY} %{cfg.buildtarget.relpath} \"../bin/" .. outputdir .. "Sandbox/\"")}
 
 	filter "configurations:Debug"
 		defines "HZ_DEBUG"
@@ -95,13 +96,12 @@ project "Hazel"
 		runtime "Release"
 		optimize "On"
 
-
-
 project "Sandbox"
 	location "Sandbox"
 	kind "ConsoleApp"
-	staticruntime "off"
+	staticruntime "on"
 	language "C++"
+	cppdialect "C++17"
 
 	targetdir ("bin/" .. outputdir .. "%{prj.name}")
 	objdir ("bin-int/" .. outputdir .. "%{prj.name}")
@@ -129,7 +129,6 @@ project "Sandbox"
 	}
 
 	filter "system:windows"
-		cppdialect "C++17"
 		systemversion "latest"
 
 		defines

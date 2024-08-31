@@ -57,7 +57,7 @@ namespace Hazel
 		EVENT_CLASS_TYPE(KeyTyped)
 
 	private:
-		int m_RepeatCount;
+		int m_RepeatCount = 0;
 	};
 
 	class HAZEL_API KeyReleasedEvent : public KeyEvent

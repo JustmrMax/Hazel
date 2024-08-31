@@ -1,11 +1,15 @@
 #pragma once
 
 #ifdef HZ_PLATFORM_WINDOWS
+#if 0
 	#ifdef HZ_BUILD_DLL
 		#define HAZEL_API	__declspec(dllexport)
 	#else
 		#define HAZEL_API	__declspec(dllimport)
 	#endif
+#else
+	#define HAZEL_API
+#endif
 #else
 	#error This Engine only supports Windows!
 #endif
