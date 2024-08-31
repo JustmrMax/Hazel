@@ -1,6 +1,6 @@
 #include "SandBoxApp.h"
 
-#include "glm/mat4x4.hpp"
+#include "glm/mat4x4.hpp" // YEAP
 
 class ExampleLayer : public Hazel::Layer
 {
@@ -8,8 +8,6 @@ public:
 	ExampleLayer()
 		: Layer("Example")
 	{
-		glm::mat4x4 projectionMatrix = glm::mat4x4();
-		int x;
 	}
 
 	void OnUpdate()
@@ -34,7 +32,6 @@ public:
 SandBox::SandBox()
 {
 	PushLayer(new ExampleLayer());
-	PushLayer(new Hazel::ImGuiLayer());
 }
 
 SandBox::~SandBox()
