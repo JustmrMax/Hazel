@@ -8,6 +8,8 @@
 #include "Hazel/Events/MouseEvent.h"
 #include "Hazel/Events/KeyEvent.h"
 
+#include "Hazel/Renderer/GraphicsContext.h"
+
 namespace Hazel
 {
 	class WindowsWindow : public Window
@@ -32,6 +34,7 @@ namespace Hazel
 		virtual void Shutdown();
 	private:
 		GLFWwindow* m_Window;
+		GraphicsContext* m_Context;
 
 		struct WindowData
 		{

@@ -1,6 +1,5 @@
 #include "SandBoxApp.h"
 
-#include "glm/mat4x4.hpp" // YEAP
 #include "imgui.h" 
 
 class ExampleLayer : public Hazel::Layer
@@ -15,8 +14,6 @@ public:
 	{
 		if (Hazel::Input::IsKeyPressed(HZ_KEY_TAB))
 			HZ_TRACE("Tab key is Pressed!");
-
-
 	}
 
 	virtual void OnImGuiRender() override
