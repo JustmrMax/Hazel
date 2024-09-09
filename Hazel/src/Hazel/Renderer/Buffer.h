@@ -1,6 +1,5 @@
 #pragma once
 
-#include "Renderer.h"
 #include <string>
 
 namespace Hazel
@@ -100,7 +99,7 @@ namespace Hazel
 		virtual BufferLayout GetLayout() const = 0;
 		virtual void SetLayout(const BufferLayout& layout) = 0;
 
-		static VertexBuffer* CreateBuffer(float* vertices, uint32_t count);
+		static VertexBuffer* Create(float* vertices, uint32_t count);
 	};
 
 	class IndexBuffer
@@ -112,6 +111,6 @@ namespace Hazel
 		virtual void Unbind() const = 0;
 		virtual uint32_t GetCount() const = 0;
 
-		static IndexBuffer* CreateBuffer(uint32_t *indecies, uint32_t count);
+		static IndexBuffer* Create(uint32_t *indecies, uint32_t count);
 	};
 }

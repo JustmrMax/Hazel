@@ -3,8 +3,9 @@
 
 #include "Log.h"
 #include "Input.h"
+#include "KeyCodes.h" // YEAP
 
-#include <Glad/glad.h>
+#include "Hazel/Renderer/Renderer.h"
 
 namespace Hazel
 {
@@ -13,28 +14,8 @@ namespace Hazel
 
 	Application* Application::m_Instance = nullptr;
 
-	static GLenum ShaderDataTypeToOpenGLBaseType(ShaderDataType type)
-	{
-		switch (type)
-		{
-			case ShaderDataType::Float:		return GL_FLOAT;
-			case ShaderDataType::Float2:	return GL_FLOAT;
-			case ShaderDataType::Float3:	return GL_FLOAT;
-			case ShaderDataType::Float4:	return GL_FLOAT;
-			case ShaderDataType::Mat3:		return GL_FLOAT;
-			case ShaderDataType::Mat4:		return GL_FLOAT;
-			case ShaderDataType::Int:		return GL_INT;
-			case ShaderDataType::Int2:		return GL_INT;
-			case ShaderDataType::Int3:		return GL_INT;
-			case ShaderDataType::Int4:		return GL_INT;
-			case ShaderDataType::Bool:		return GL_BOOL;
-		}
-
-		HZ_CORE_ASSERT(false, "Unknown ShaderDataType!");
-		return GL_NONE;
-	}
-
 	Application::Application()
+		: m_Camera(-1.6f, 1.6f, -0.9f, 0.9f)
 	{
 		m_Window = std::unique_ptr<Window>(Window::Create());
 		m_Window->SetEventCallBack(BIND_EVENT_FN(OnEvent));
@@ -45,48 +26,65 @@ namespace Hazel
 		m_ImGuiLayer = new ImGuiLayer();
 		PushOverlay(m_ImGuiLayer);
 
-		// VertexArrayBuffer
-		glGenVertexArrays(1, &m_VertexArray); 
-		glBindVertexArray(m_VertexArray); 
-
 		// VertexBuffer
 		float vertices[3 * 7] = {
 			-0.5f, -0.5f, 0.0f, 0.5f, -0.5f, 1.0f, 1.0f,
 			0.5f, -0.5f, 0.0f, 0.5f, 1.0f, 0.05, 1.0f,
 			0.0f, 0.5f, 0.0f, 0.5f, -0.5f, 1.0f, 1.0f
 		};
-		m_VertexBuffer.reset(VertexBuffer::CreateBuffer(vertices, sizeof(vertices)));
+		m_VertexBuffer.reset(VertexBuffer::Create(vertices, sizeof(vertices)));
 
 		// IndexBuffer
 		uint32_t indecies[3] = {0, 1, 2};
-		m_IndexBuffer.reset(IndexBuffer::CreateBuffer(indecies, sizeof(indecies) / sizeof(uint32_t)));
+		m_IndexBuffer.reset(IndexBuffer::Create(indecies, sizeof(indecies) / sizeof(uint32_t)));
 
 		BufferLayout layout = {
 			{ ShaderDataType::Float3, "a_Position" },
 			{ ShaderDataType::Float4, "a_Color" }
 		};
 
-		uint32_t index = 0;
 		m_VertexBuffer->SetLayout(layout);
 
-		for (auto& element : m_VertexBuffer->GetLayout())
-		{
-			glEnableVertexAttribArray(index);
-			glVertexAttribPointer(index,
-				element.GetComponentCount(element.Type),
-				ShaderDataTypeToOpenGLBaseType(element.Type),
-				element.Normalized,
-				layout.GetStride(),
-				(const void *)element.Offset);
+		// VertexArrayBuffer
+		m_VertexArray.reset(VertexArray::Create());
+		m_VertexArray->AddVertexBuffer(m_VertexBuffer);
+		m_VertexArray->SetIndexBuffer(m_IndexBuffer);
 
-			++index;
-		}
+		// Square VB
+		float squareVertices[3 * 4] = {
+			-0.5f, -0.5f, 0.0f,
+			0.5f, -0.5f, 0.0f, 
+			0.5f, 0.5f, 0.0f,
+			-0.5f, 0.5f, 0.0f
+		};
+
+		std::shared_ptr<VertexBuffer> squareVB;
+		squareVB.reset(VertexBuffer::Create(squareVertices, sizeof(squareVertices)));
+
+		BufferLayout layout2 = {
+			{ ShaderDataType::Float3, "a_Position"}
+		};
+
+		squareVB->SetLayout(layout2);
+
+		// IndexBuffer
+		uint32_t squareIndecies[6] = { 0, 1, 2, 2, 3, 0 };
+
+		std::shared_ptr<IndexBuffer> squareIB;
+		squareIB.reset(IndexBuffer::Create(squareIndecies, sizeof(squareIndecies) / sizeof(uint32_t)) );
+
+		// Square VA
+		m_SquareVA.reset(VertexArray::Create());
+		m_SquareVA->AddVertexBuffer(squareVB);
+		m_SquareVA->SetIndexBuffer(squareIB);
 
 		std::string vertexSrc = R"(
 			#version 330 core
 
 			layout(location = 0) in vec3 a_Position;
 			layout(location = 1) in vec4 a_Color;
+
+			uniform mat4 u_ViewProjection;
 
 			out vec3 v_Position;
 			out vec4 v_Color;
@@ -95,7 +93,7 @@ namespace Hazel
 			{
 				v_Position = a_Position;
 				v_Color = a_Color;
-				gl_Position = vec4(a_Position, 1.0);
+				gl_Position = u_ViewProjection * vec4(a_Position, 1.0);
 			}
 
 		)";
@@ -115,6 +113,38 @@ namespace Hazel
 
 		)";
 
+		std::string BlueVertexSrc = R"(
+			#version 330 core
+
+			layout(location = 0) in vec3 a_Position;
+
+			uniform mat4 u_ViewProjection;
+
+			out vec3 v_Position;
+
+			void main()
+			{
+				v_Position = a_Position;
+				gl_Position = u_ViewProjection * vec4(a_Position, 1.0);
+			}
+
+		)";
+
+		std::string BlueFragmentSrc = R"(
+			#version 330 core
+
+			layout(location=0) out vec4 color;
+
+			in vec3 v_Position;
+
+			void main()
+			{
+				color = vec4(0.3f, 0.5f, 0.9f, 1.0f);
+			}
+
+		)";
+
+		m_BlueShader.reset(new Shader(BlueVertexSrc, BlueFragmentSrc));
 		m_Shader.reset(new Shader(vertexSrc, fragmentxSrc));
 	}
 
@@ -126,6 +156,7 @@ namespace Hazel
 	{
 		EventDispatcher dispatcher(event);
 		dispatcher.Dispatch<WindowCloseEvent>(BIND_EVENT_FN(OnWindowClose));
+		// dispatcher.Dispatch<KeyPressedEvent>(BIND_EVENT_FN(OnKeyPressed)); // YEAP
 
 		for (auto it = m_LayerStack.end(); it != m_LayerStack.begin();)
 		{
@@ -140,12 +171,18 @@ namespace Hazel
 	{
 		while (m_Running)
 		{
-			glClearColor(0.1f, 0.1f, 0.1f, 1);
-			glClear(GL_COLOR_BUFFER_BIT);
+			RenderCommand::SetClearColor( glm::vec4(0.1f, 0.1f, 0.1f, 1.0f) );
+			RenderCommand::Clear();
 
-			glBindVertexArray(m_VertexArray);
-			m_Shader->Bind();
-			glDrawElements(GL_TRIANGLES, m_IndexBuffer->GetCount(), GL_UNSIGNED_INT, nullptr);
+			//m_Camera.SetPosition(glm::vec3(0.5f, 0.5f, 0.0f) );
+			m_Camera.SetRotation(90.0f);
+
+			Renderer::BeginScene(m_Camera);
+
+			Renderer::Submit(m_BlueShader, m_SquareVA);
+			Renderer::Submit(m_Shader, m_VertexArray);
+			
+			Renderer::EndScene();
 
 			for (Layer* layer : m_LayerStack)
 				layer->OnUpdate();
@@ -177,4 +214,47 @@ namespace Hazel
 
 		return true;
 	}
+
+	//bool Application::OnKeyPressed(KeyPressedEvent& event)
+	//{
+	//	const float speedMotion = 0.04f;
+
+	//	switch (event.GetKeyCode())
+	//	{
+	//	case HZ_KEY_W:
+	//	{
+	//		glm::vec3 oldPosition = m_Camera.GetPosition();
+	//		oldPosition.y += speedMotion;
+	//		m_Camera.SetPosition(oldPosition);
+	//		break;
+	//	}
+	//	case HZ_KEY_S:
+	//	{
+	//		glm::vec3 oldPosition = m_Camera.GetPosition();
+	//		oldPosition.y -= speedMotion;
+	//		m_Camera.SetPosition(oldPosition);
+	//		break;
+	//	}
+	//	case HZ_KEY_A:
+	//	{
+	//		glm::vec3 oldPosition = m_Camera.GetPosition();
+	//		oldPosition.x -= speedMotion;
+	//		m_Camera.SetPosition(oldPosition);
+	//		break;
+	//	}
+	//	case HZ_KEY_D:
+	//	{
+	//		glm::vec3 oldPosition = m_Camera.GetPosition();
+	//		oldPosition.x += speedMotion;
+	//		m_Camera.SetPosition(oldPosition);
+	//		break;
+	//	}
+
+	//	default:
+	//		HZ_WARN("Unknown KeyCode for OnKeyPressedEvent()");
+	//		return true;
+	//	}
+
+	//	return true;
+	//}
 }

@@ -1,6 +1,5 @@
 #include "hzpch.h"
-#include "Buffer.h"
-#include "Renderer.h"
+#include "Renderer.h" // YEAP depedency circle
 
 #include "Platforms/OpenGL/OpenGLBuffer.h"
 
@@ -39,15 +38,15 @@ namespace Hazel
 	///////////////////////////////////////////////////////////////////////////////////////////////////////////////
 	//VertexBuffer/////////////////////////////////////////////////////////////////////////////////////////////////
 	///////////////////////////////////////////////////////////////////////////////////////////////////////////////
-	VertexBuffer* VertexBuffer::CreateBuffer(float *vertices, uint32_t count)
+	VertexBuffer* VertexBuffer::Create(float *vertices, uint32_t count)
 	{
 		switch (Renderer::GetAPI())
 		{
-		case RendererAPI::None:
+		case RendererAPI::API::None:
 			HZ_CORE_ASSERT(false, "There is handle for None rendererAPI");
 			return nullptr;
 
-		case RendererAPI::OpenGL:
+		case RendererAPI::API::OpenGL:
 			return new OpenGLVertexBuffer(vertices, count);
 		}
 
@@ -58,15 +57,15 @@ namespace Hazel
 	////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 	//IndexBuffer///////////////////////////////////////////////////////////////////////////////////////////////////
 	////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-	IndexBuffer* IndexBuffer::CreateBuffer(uint32_t *indecies, uint32_t count)
+	IndexBuffer* IndexBuffer::Create(uint32_t *indecies, uint32_t count)
 	{
 		switch (Renderer::GetAPI())
 		{
-		case RendererAPI::None:
+		case RendererAPI::API::None:
 			HZ_CORE_ASSERT(false, "There is handle for None rendererAPI");
 			return nullptr;
 
-		case RendererAPI::OpenGL:
+		case RendererAPI::API::OpenGL:
 			return new OpenGLIndexBuffer(indecies, count);
 		}
 

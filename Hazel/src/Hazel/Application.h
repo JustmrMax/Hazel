@@ -11,6 +11,8 @@
 #include "Hazel/ImGui/ImGuiLayer.h"
 #include "Hazel/Renderer/Shader.h"
 #include "Hazel/Renderer/Buffer.h"
+#include "Hazel/Renderer/VertexArray.h"
+#include "Hazel/Renderer/OrhographicCamera.h"
 
 namespace Hazel
 {
@@ -31,16 +33,22 @@ namespace Hazel
 
 	private:
 		bool OnWindowClose(WindowCloseEvent& event);
+		// bool OnKeyPressed(KeyPressedEvent& event);
 
 		ImGuiLayer* m_ImGuiLayer;
 		std::unique_ptr<Window> m_Window;
 		LayerStack m_LayerStack;
 		bool m_Running = true;
 
-		unsigned int m_VertexArray = 0;
+		std::shared_ptr<VertexArray> m_VertexArray;
 		std::shared_ptr<VertexBuffer> m_VertexBuffer;
 		std::shared_ptr<IndexBuffer> m_IndexBuffer;
 		std::unique_ptr<Shader> m_Shader;
+
+		std::shared_ptr<VertexArray> m_SquareVA;
+		std::unique_ptr<Shader> m_BlueShader;
+
+		OrhographicCamera m_Camera;
 
 		static Application* m_Instance;
 	};
