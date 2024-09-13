@@ -12,7 +12,7 @@ namespace Hazel
 		static void BeginScene(OrhographicCamera& camera); // TODO it's had to be implemented
 		static void EndScene();
 
-		static void Submit(const std::unique_ptr<Shader>& shader, const std::shared_ptr<VertexArray>& vertexArray);
+		static void Submit(const std::unique_ptr<Shader>& shader, const std::shared_ptr<VertexArray>& vertexArray, const glm::mat4& transform = glm::mat4(1));
 
 		inline static RendererAPI::API GetAPI() { return RendererAPI::GetAPI(); }
 
