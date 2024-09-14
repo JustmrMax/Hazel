@@ -1,6 +1,11 @@
 #include "SandBoxApp.h"
 
+#include <imgui.h>
+
 #include <glm/gtc/matrix_transform.hpp>
+#include <glm/gtc/type_ptr.hpp>
+
+#include "Platforms/OpenGL/OpenGLShader.h" // YEAP
 
 class ExampleLayer : public Hazel::Layer
 {
@@ -96,7 +101,7 @@ public:
 
 		)";
 
-		std::string BlueVertexSrc = R"(
+		std::string flatColorVertexSrc = R"(
 			#version 330 core
 
 			layout(location = 0) in vec3 a_Position;
@@ -114,22 +119,24 @@ public:
 
 		)";
 
-		std::string BlueFragmentSrc = R"(
+		std::string flatColorFragmentSrc = R"(
 			#version 330 core
 
 			layout(location=0) out vec4 color;
 
 			in vec3 v_Position;
 
+			uniform vec3 u_Color;
+
 			void main()
 			{
-				color = vec4(0.3f, 0.5f, 0.9f, 1.0f);
+				color = vec4(u_Color, 1.0f);
 			}
 
 		)";
 
-		m_BlueShader.reset(new Hazel::Shader(BlueVertexSrc, BlueFragmentSrc));
-		m_Shader.reset(new Hazel::Shader(vertexSrc, fragmentxSrc));
+		m_Shader.reset(Hazel::Shader::Create(vertexSrc, fragmentxSrc));
+		m_FlatColorShader.reset(Hazel::Shader::Create(flatColorVertexSrc, flatColorFragmentSrc));
 	}
 
 	virtual void OnUpdate(Hazel::Timestep ts) override
@@ -163,14 +170,17 @@ public:
 
 		glm::mat4 scale = glm::scale(glm::mat4(1.0f), glm::vec3(0.1f, 0.1f, 0.1f));
 
-		for (int j = 0; j < 1000; ++j)
+		m_FlatColorShader->Bind();
+		std::dynamic_pointer_cast<Hazel::OpenGLShader>(m_FlatColorShader)->UploadUniformFloat3("u_Color", m_SquareColor);
+
+		for (int j = 0; j < 10; ++j)
 		{
-			for (int i = 0; i < 1000; ++i)
+			for (int i = 0; i < 10; ++i)
 			{
 				glm::vec3 pos = glm::vec3((float)i * 0.11f, (float)j * 0.11f, 0.0f);
 				glm::mat4 transform = glm::translate(glm::mat4(1.0f), pos);
 
-				Hazel::Renderer::Submit(m_BlueShader, m_SquareVA, transform * scale);
+				Hazel::Renderer::Submit(m_FlatColorShader, m_SquareVA, transform * scale);
 			}
 		}
 
@@ -181,6 +191,9 @@ public:
 
 	virtual void OnImGuiRender() override
 	{
+		ImGui::Begin("Settings");
+		ImGui::ColorEdit3("Color", glm::value_ptr(m_SquareColor));
+		ImGui::End();
 	}
 
 	virtual void OnEvent(Hazel::Event& event) override
@@ -191,10 +204,12 @@ private:
 	std::shared_ptr<Hazel::VertexArray> m_VertexArray;
 	std::shared_ptr<Hazel::VertexBuffer> m_VertexBuffer;
 	std::shared_ptr<Hazel::IndexBuffer> m_IndexBuffer;
-	std::unique_ptr<Hazel::Shader> m_Shader;
-
 	std::shared_ptr<Hazel::VertexArray> m_SquareVA;
-	std::unique_ptr<Hazel::Shader> m_BlueShader;
+
+	std::shared_ptr<Hazel::Shader> m_Shader;
+	std::shared_ptr<Hazel::Shader> m_FlatColorShader;
+
+	glm::vec3 m_SquareColor = glm::vec3(0.5f, 0.0f, 0.0f);
 
 	Hazel::OrhographicCamera m_Camera;
 
