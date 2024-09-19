@@ -18,6 +18,7 @@
 #include "Hazel/Renderer/RenderCommand.h"
 #include "Hazel/Renderer/OrhographicCamera.h"
 #include "Hazel/Renderer/Shader.h"
+#include "Hazel/Renderer/Texture.h"
 
 //EntryPoint --------------------------------------------------------------
 #include "Hazel/EntryPoint.h"
