@@ -184,6 +184,7 @@ public:
 		m_TextureShader.reset(Hazel::Shader::Create(textureShaderVertexSrc, textureShaderFragmentSrc));
 
 		m_Texture = Hazel::Texture2D::Create("assets/textures/CheckBoard.png");
+		m_LogoTexture = Hazel::Texture2D::Create("assets/textures/TheChernoLogo.png");
 
 		std::dynamic_pointer_cast<Hazel::OpenGLShader>(m_TextureShader)->Bind();
 		std::dynamic_pointer_cast<Hazel::OpenGLShader>(m_TextureShader)->UploadUniformInt("u_Texture", 0);
@@ -236,7 +237,9 @@ public:
 		}
 
 		m_Texture->Bind();
- 		Hazel::Renderer::Submit(m_TextureShader, m_SquareVA, glm::scale(glm::mat4(1.0f), glm::vec3(1.5f)));
+		Hazel::Renderer::Submit(m_TextureShader, m_SquareVA, glm::scale(glm::mat4(1.0f), glm::vec3(1.2f)));
+		m_LogoTexture->Bind();
+		Hazel::Renderer::Submit(m_TextureShader, m_SquareVA, glm::scale(glm::mat4(1.0f), glm::vec3(1.2f)));
 
 		Hazel::Renderer::EndScene();
 	}
@@ -261,7 +264,7 @@ private:
 	Hazel::Ref<Hazel::Shader> m_Shader;
 	Hazel::Ref<Hazel::Shader> m_FlatColorShader, m_TextureShader;
 
-	Hazel::Ref<Hazel::Texture2D> m_Texture;
+	Hazel::Ref<Hazel::Texture2D> m_Texture, m_LogoTexture;
 
 	glm::vec3 m_SquareColor = glm::vec3(0.3f, 1.0f, 0.5f);
 

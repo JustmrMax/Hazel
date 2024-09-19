@@ -9,6 +9,8 @@ namespace Hazel
 	class Renderer
 	{
 	public:
+		inline static void Init() { RenderCommand::Init(); }
+
 		static void BeginScene(OrhographicCamera& camera); // TODO it's had to be implemented
 		static void EndScene();
 
