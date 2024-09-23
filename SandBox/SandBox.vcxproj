@@ -148,6 +148,9 @@
     <Image Include="assets\textures\CheckBoard.png" />
     <Image Include="assets\textures\TheChernoLogo.png" />
   </ItemGroup>
+  <ItemGroup>
+    <Text Include="assets\shaders\TextureShader.glsl" />
+  </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
   </ImportGroup>
