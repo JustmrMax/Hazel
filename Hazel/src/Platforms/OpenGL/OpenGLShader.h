@@ -7,7 +7,7 @@ namespace Hazel
 	class OpenGLShader : public Shader
 	{
 	public:
-		OpenGLShader(const std::string& pathFile);
+		OpenGLShader(const std::string& filepath);
 		OpenGLShader(std::string& vertexSrc, std::string& fragmentSrc);
 		virtual ~OpenGLShader();
 
@@ -25,8 +25,9 @@ namespace Hazel
 		void UploadUniformMat4(const std::string& name, const glm::mat4& matrix);
 
 	private:
-		unsigned int CompileShader(unsigned int shaderType, const std::string& source);
-		void CreateShaderProgram(const std::string& vertexShaderSource, const std::string& fragmentShaderSource);
+		std::string ReadFile(const std::string& filepath);
+		std::unordered_map<unsigned int, std::string> PreProcess(const std::string& source);
+		void Compile(std::unordered_map<unsigned int, std::string>& shaderSources);
 
 		uint32_t m_RendererID = 0;
 	};
