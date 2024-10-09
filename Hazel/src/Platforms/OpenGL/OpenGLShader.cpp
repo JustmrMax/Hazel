@@ -22,9 +22,12 @@ namespace Hazel
 		std::string source = ReadFile(filepath);
 		std::unordered_map<unsigned int, std::string> shaderSources = PreProcess(source);
 		Compile(shaderSources);
+
+		ExtractName(filepath, m_Name);
 	}
 
-	OpenGLShader::OpenGLShader(std::string& vertexSrc, std::string& fragmentSrc)
+	OpenGLShader::OpenGLShader(const std::string& name, const std::string& vertexSrc, const std::string& fragmentSrc)
+		: m_Name(name)
 	{
 		std::unordered_map<unsigned int, std::string> sources;
 		sources[GL_VERTEX_SHADER] = vertexSrc;
@@ -45,6 +48,11 @@ namespace Hazel
 	void OpenGLShader::Unbind() const
 	{
 		glUseProgram(0);
+	}
+
+	const std::string& OpenGLShader::GetName() const
+	{
+		return m_Name;
 	}
 
 	void OpenGLShader::UploadUniformInt(const std::string& name, const int value)
@@ -138,7 +146,10 @@ namespace Hazel
 	void OpenGLShader::Compile(std::unordered_map<unsigned int, std::string>& shaderSources)
 	{
 		unsigned int program = glCreateProgram();
-		std::vector<unsigned int> glShaderIDs(shaderSources.size());
+		// std::vector<unsigned int> glShaderIDs(shaderSources.size());
+		HZ_CORE_ASSERT(shaderSources.size() <= 2, "Only support for 2 shader type!");
+		int glShaderIDsIndex = 0;
+		std::array<unsigned int, 2> glShaderIDs;
 
 		for (auto& keyValue : shaderSources)
 		{
@@ -172,7 +183,8 @@ namespace Hazel
 			}
 
 			glAttachShader(program, shader);
-			glShaderIDs.push_back(shader);
+			glShaderIDs[glShaderIDsIndex++] = shader;
+			// glShaderIDs.push_back(shader);
 		}
 
 		glLinkProgram(program);
@@ -190,7 +202,7 @@ namespace Hazel
 
 			glDeleteProgram(program);
 
-			for (auto id : glShaderIDs)
+			for (unsigned int id : glShaderIDs)
 				glDeleteShader(id);
 
 			HZ_CORE_ERROR("{0}", infoLog.data());
@@ -198,9 +210,36 @@ namespace Hazel
 			return;
 		}
 
-		for (auto id : glShaderIDs)
+		for (unsigned int id : glShaderIDs)
 			glDetachShader(program, id);
 
 		m_RendererID = program;
+	}
+
+	void OpenGLShader::ExtractName(const std::string& filepath, std::string& result)
+	{
+		// Extracting name from filepath
+		size_t strSize = filepath.size();
+
+		// 1. Find last slash in filepath
+		size_t lastSlashPos = filepath.rfind("\\");
+
+		if (lastSlashPos == std::string::npos)
+			lastSlashPos = filepath.rfind("/");
+
+		HZ_CORE_ASSERT((lastSlashPos != std::string::npos), "Invalid filepath!");
+
+		// 2. Find Last dot
+		size_t lastDotPos = filepath.rfind('.');
+		size_t extensionLen;
+
+		if (lastDotPos != std::string::npos)
+			extensionLen = strSize - lastDotPos + 1;
+		else
+			extensionLen = 0;
+
+		// 3. Extracting name
+		size_t textureNameCount = strSize - lastSlashPos - extensionLen;
+		result = filepath.substr(lastSlashPos + 1, textureNameCount);
 	}
 }

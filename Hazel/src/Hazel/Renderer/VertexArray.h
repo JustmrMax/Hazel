@@ -21,6 +21,6 @@ namespace Hazel
 		virtual inline std::vector<Ref<VertexBuffer>>& GetVertexBuffers() = 0;
 		virtual inline Ref<IndexBuffer>& GetIndexBuffer() = 0;
 
-		static VertexArray* Create();
+		static Ref<VertexArray> Create();
 	};
 }

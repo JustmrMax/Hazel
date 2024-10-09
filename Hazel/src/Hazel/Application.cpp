@@ -18,13 +18,15 @@ namespace Hazel
 
 	Application::Application()
 	{
+		if (m_Instance == nullptr)
+			m_Instance = this;
+		else
+			HZ_CORE_ASSERT(false, "Threre is only support for one instance of Application class!");
+
 		m_Window = std::unique_ptr<Window>(Window::Create());
 		m_Window->SetEventCallBack(BIND_EVENT_FN(OnEvent));
 
 		Renderer::Init();
-
-		if (m_Instance == nullptr)
-			m_Instance = this;
 
 		m_ImGuiLayer = new ImGuiLayer();
 		PushOverlay(m_ImGuiLayer);
@@ -38,6 +40,7 @@ namespace Hazel
 	{
 		EventDispatcher dispatcher(event);
 		dispatcher.Dispatch<WindowCloseEvent>(BIND_EVENT_FN(OnWindowClose));
+		dispatcher.Dispatch<WindowResizeEvent>(BIND_EVENT_FN(OnWindowResize));
 
 		for (auto it = m_LayerStack.end(); it != m_LayerStack.begin();)
 		{
@@ -56,8 +59,11 @@ namespace Hazel
 			Timestep ts = frameTime - m_LastFrameTime;
 			m_LastFrameTime = frameTime;
 
-			for (Layer* layer : m_LayerStack)
-				layer->OnUpdate(ts);
+			if (!m_Minimized)
+			{
+				for (Layer* layer : m_LayerStack)
+					layer->OnUpdate(ts);
+			}
 
 			m_ImGuiLayer->Begin();
 			for (Layer* layer : m_LayerStack)
@@ -87,4 +93,17 @@ namespace Hazel
 		return true;
 	}
 
+	bool Application::OnWindowResize(WindowResizeEvent& event)
+	{
+		if (event.GetWidth() == 0 || event.GetHeight() == 0)
+		{
+			m_Minimized = true;
+			return true;
+		}
+
+		m_Minimized = false;
+		Renderer::OnWindowResize(event.GetWidth(), event.GetHeight());
+
+		return true;
 	}
+}

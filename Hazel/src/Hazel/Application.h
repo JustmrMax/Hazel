@@ -17,7 +17,7 @@
 
 namespace Hazel
 {
-	class HAZEL_API Application
+	class HAZEL_API Application // Signleton - single instance of this class supported
 	{
 	public:
 		Application();
@@ -34,12 +34,14 @@ namespace Hazel
 
 	private:
 		bool OnWindowClose(WindowCloseEvent& event);
+		bool OnWindowResize(WindowResizeEvent& event);
 
 	private:
 		ImGuiLayer* m_ImGuiLayer;
 		std::unique_ptr<Window> m_Window;
 		LayerStack m_LayerStack;
 		bool m_Running = true;
+		bool m_Minimized = false;
 		float m_LastFrameTime = 0.0f;
 
 	private:

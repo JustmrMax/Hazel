@@ -57,7 +57,7 @@ namespace Hazel
 					WindowData& data = *(WindowData*)glfwGetWindowUserPointer(window);
 					KeyPressedEvent e(key, 0);
 					
-					data.EventCallBack(e); 
+					data.EventCallBack(e); // call a callback function (OnEvent form Application class)
 					break;
 				}
 
@@ -99,6 +99,7 @@ namespace Hazel
 
 				data.Width = width;
 				data.Height = height;
+				HZ_CORE_WARN("{0}, {1}", width, height);
 				data.EventCallBack(e);
 			}
 		);

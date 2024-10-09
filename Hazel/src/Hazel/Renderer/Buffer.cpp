@@ -38,7 +38,7 @@ namespace Hazel
 	///////////////////////////////////////////////////////////////////////////////////////////////////////////////
 	//VertexBuffer/////////////////////////////////////////////////////////////////////////////////////////////////
 	///////////////////////////////////////////////////////////////////////////////////////////////////////////////
-	VertexBuffer* VertexBuffer::Create(float *vertices, uint32_t count)
+	Ref<VertexBuffer> VertexBuffer::Create(float *vertices, uint32_t count)
 	{
 		switch (Renderer::GetAPI())
 		{
@@ -47,7 +47,7 @@ namespace Hazel
 			return nullptr;
 
 		case RendererAPI::API::OpenGL:
-			return new OpenGLVertexBuffer(vertices, count);
+			return std::make_shared<OpenGLVertexBuffer>(vertices, count);
 		}
 
 		HZ_CORE_ASSERT(false, "There is no such a rendererAPI");
@@ -57,7 +57,7 @@ namespace Hazel
 	////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 	//IndexBuffer///////////////////////////////////////////////////////////////////////////////////////////////////
 	////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-	IndexBuffer* IndexBuffer::Create(uint32_t *indecies, uint32_t count)
+	Ref<IndexBuffer> IndexBuffer::Create(uint32_t *indecies, uint32_t count)
 	{
 		switch (Renderer::GetAPI())
 		{
@@ -66,7 +66,7 @@ namespace Hazel
 			return nullptr;
 
 		case RendererAPI::API::OpenGL:
-			return new OpenGLIndexBuffer(indecies, count);
+			return std::make_shared<OpenGLIndexBuffer>(indecies, count);
 		}
 
 		HZ_CORE_ASSERT(false, "There is no such a rendererAPI");
