@@ -15,38 +15,10 @@ SandBox2D::SandBox2D()
 
 void SandBox2D::OnAttach()
 {
-	// VertexBuffer
-	float squareVertices[3 * 4] = { 
-		-0.5f, -0.5f, 0.0f, 
-		0.5f, -0.5f, 0.0f,
-		0.5f, 0.5f, 0.0f,
-		-0.5f, 0.5f, 0.0f,
-	};
-
-	Hazel::Ref<Hazel::VertexBuffer> squareVB = Hazel::VertexBuffer::Create(squareVertices, sizeof(squareVertices));
-
-	Hazel::BufferLayout layout = {
-		{ Hazel::ShaderDataType::Float3, "a_Position" }
-	};
-	squareVB->SetLayout(layout);
-
-	// IndexBuffer
-	uint32_t squareIndecies[6] = { 0, 1, 2, 2, 3, 0 };
-	Hazel::Ref<Hazel::IndexBuffer> squareIB = Hazel::IndexBuffer::Create(squareIndecies, sizeof(squareIndecies) / sizeof(uint32_t));
-
-	// Square VA
-	m_SquareVA = Hazel::VertexArray::Create();
-
-	m_SquareVA->AddVertexBuffer(squareVB);
-	m_SquareVA->SetIndexBuffer(squareIB);
-
-	// Square Shader
-	m_FlatColorShader = Hazel::Shader::Create("assets/shaders/FlatColor.glsl");
 }
 
 void SandBox2D::OnDettach()
 {
-
 }
 
 void SandBox2D::OnUpdate(Hazel::Timestep ts)
@@ -58,19 +30,19 @@ void SandBox2D::OnUpdate(Hazel::Timestep ts)
 	Hazel::RenderCommand::SetClearColor(glm::vec4(0.1f, 0.1f, 0.1f, 1.0f));
 	Hazel::RenderCommand::Clear();
 
-	Hazel::Renderer::BeginScene(m_CameraController.GetCamera());
+	Hazel::Renderer2D::BeginScene(m_CameraController.GetCamera());
 
-	m_FlatColorShader->Bind();
-	std::dynamic_pointer_cast<Hazel::OpenGLShader>(m_FlatColorShader)->UploadUniformFloat3("u_Color", m_SquareColor);
-	Hazel::Renderer::Submit(m_FlatColorShader, m_SquareVA, glm::scale(glm::mat4(1.0f), glm::vec3(1.2f)));
+	Hazel::Renderer2D::DrawQuad(glm::vec2(1.0f, 1.0f), glm::vec2(1.0f, 1.0f), glm::vec4(0.3f, 0.5f, 0.9f, 1.0f));
+	Hazel::Renderer2D::DrawQuad(glm::vec2(0.0f, 0.0f), glm::vec2(0.3f, 1.1f), glm::vec4(0.9f, 0.5f, 0.9f, 1.0f));
+	Hazel::Renderer2D::DrawQuad(glm::vec2(-1.0f, 0.5f), glm::vec2(0.8f, 0.8f), glm::vec4(0.1f, 0.1f, 0.9f, 1.0f));
 
-	Hazel::Renderer::EndScene();
+	Hazel::Renderer2D::EndScene();
 }
 
 void SandBox2D::OnImGuiRender()
 {
 	ImGui::Begin("Settings");
-	ImGui::ColorEdit3("Color", glm::value_ptr(m_SquareColor));
+	ImGui::ColorEdit4("Color", glm::value_ptr(m_SquareColor));
 	ImGui::End();
 }
 
