@@ -1,11 +1,15 @@
 #include "SandBoxApp.h"
 
 #include <imgui.h>
-
 #include <glm/gtc/matrix_transform.hpp>
 #include <glm/gtc/type_ptr.hpp>
 
 #include "Platforms/OpenGL/OpenGLShader.h" // YEAP
+#include "SandBox2D.h"
+
+//EntryPoint///////////////////////////////////////////////////////////////////////////////////////////////////
+#include "Core/EntryPoint.h"
+///////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 class ExampleLayer : public Hazel::Layer
 {
@@ -230,16 +234,17 @@ private:
 	// Hazel::OrhographicCamera m_Camera;
 	Hazel::OrhographicCameraController m_CameraController;
 
-	glm::vec3 m_CameraPosition;
-	float m_CameraMoveSpeed = 5.41f;
-
-	float m_CameraRotationSpeed = 180.3f;
-	float m_CameraRotation = 0.0f;
+	// glm::vec3 m_CameraPosition;
+	// float m_CameraMoveSpeed = 5.41f;
+	// 
+	// float m_CameraRotationSpeed = 180.3f;
+	// float m_CameraRotation = 0.0f;
 };
 
 SandBox::SandBox()
 {
-	PushLayer(new ExampleLayer());
+	// PushLayer(new ExampleLayer());
+	PushLayer(new SandBox2D());
 }
 
 SandBox::~SandBox()
