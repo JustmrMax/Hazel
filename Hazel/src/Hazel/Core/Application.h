@@ -1,19 +1,19 @@
 #pragma once
 
 #include "Core.h"
-
-#include "Events/Event.h"
-#include "Events/ApplicationEvent.h"
 #include "Layer.h"
 #include "LayerStack.h"
 #include "Window.h"
+#include "OrhographicCamera.h"
+
+#include "Events/Event.h"
+#include "Events/ApplicationEvent.h"
 
 #include "ImGui/ImGuiLayer.h"
 
 #include "Renderer/Shader.h"
 #include "Renderer/Buffer.h"
 #include "Renderer/VertexArray.h"
-#include "Renderer/OrhographicCamera.h"
 
 namespace Hazel
 {

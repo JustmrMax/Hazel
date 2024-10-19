@@ -1,8 +1,8 @@
-#include "OrhographicCamera.h"
+#include "Core/OrhographicCamera.h"
 
-#include "Hazel/Core/Timestep.h"
-#include "Hazel/Events/ApplicationEvent.h"
-#include "Hazel/Events/MouseEvent.h"
+#include "Core/Timestep.h"
+#include "Events/ApplicationEvent.h"
+#include "Events/MouseEvent.h"
 
 namespace Hazel
 {

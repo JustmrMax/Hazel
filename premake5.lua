@@ -1,6 +1,5 @@
 workspace "Hazel"
 	architecture "x64"
-
 	startproject "Sandbox"
 
 	configurations
@@ -67,6 +66,7 @@ project "Hazel"
 
 	includedirs
 	{
+		"%{prj.name}/src/Hazel",
 		"%{prj.name}/src",
 		"%{prj.name}/vendor/spdlog/include",
 		"%{IncludeDir.GLFW}",
@@ -120,12 +120,13 @@ project "Sandbox"
 	includedirs
 	{
 		"Hazel/vendor/spdlog/include",
+		"Hazel/src/Hazel",
+		"Hazel/src/",
 		"%{prj.name}/src",
 		"%{IncludeDir.ImGui}",
 		"%{IncludeDir.GLFW}",
 		"%{IncludeDir.Glad}",
 		"%{IncludeDir.glm}",
-		"Hazel/src"
 	}
 
 	links

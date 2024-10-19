@@ -99,7 +99,7 @@ namespace Hazel
 
 				data.Width = width;
 				data.Height = height;
-				HZ_CORE_WARN("{0}, {1}", width, height);
+				HZ_CORE_INFO("{0}, {1}", width, height);
 				data.EventCallBack(e);
 			}
 		);

@@ -4,7 +4,7 @@
 #include <unordered_map>
 #include <glm/glm.hpp>
 
-#include "Hazel/core.h"
+#include "Core/Core.h"
 	
 namespace Hazel
 {

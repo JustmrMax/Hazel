@@ -6,7 +6,7 @@
 #include "backends/imgui_impl_opengl3.h"
 #include "backends/imgui_impl_glfw.h"
 
-#include "Hazel/Application.h" // YEAP Circle dependency
+#include "Core/Application.h" // YEAP Circle dependency
 
 // Temporary
 #include <glad/glad.h>
