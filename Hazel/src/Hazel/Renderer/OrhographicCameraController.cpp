@@ -17,6 +17,9 @@ namespace Hazel
 	{
 		// Handling Camera movement
 
+		// When we zoom out we slow down the speedmovement YEAP
+		ts = ts * m_ZoomLevel;
+
 		if (Input::IsKeyPressed(HZ_KEY_D))
 			m_CameraPosition.x += m_TranslationMovementSpeed * ts;
 		else if (Input::IsKeyPressed(HZ_KEY_A))
@@ -26,6 +29,10 @@ namespace Hazel
 			m_CameraPosition.y += m_TranslationMovementSpeed * ts;
 		else if (Input::IsKeyPressed(HZ_KEY_S))
 			m_CameraPosition.y -= m_TranslationMovementSpeed * ts;
+
+		// Special cases (for now)
+		if (Input::IsKeyPressed(HZ_KEY_Z))
+			SetZoomLevel(1.0f);
 			
 		// Handling Rotation Camera
 		if (m_CanRotate)
@@ -34,6 +41,8 @@ namespace Hazel
 				m_CameraRotation += m_TranslationRotationSpeed * ts;
 			else if (Input::IsKeyPressed(HZ_KEY_E))
 				m_CameraRotation -= m_TranslationRotationSpeed * ts;
+			else if (Input::IsKeyPressed(HZ_KEY_C))
+				m_CameraRotation = 0.0f;
 
 			m_Camera.SetRotation(m_CameraRotation);
 		}
@@ -51,16 +60,22 @@ namespace Hazel
 
 	bool OrhographicCameraController::OnScrolledEvent(MouseScrolledEvent& e)
 	{
-		m_ZoomLevel -= e.GetYOffset() * 0.25;
+		float zoomLevel = m_ZoomLevel - e.GetYOffset() * 0.25;
+		
+		SetZoomLevel(zoomLevel);
+		return true;
+	}
 
-		if (m_ZoomLevel <= 0.5f) // YEAP to do : add consts
+	void OrhographicCameraController::SetZoomLevel(float zoomLevel)
+	{
+		if (zoomLevel <= 0.5f) // YEAP to do : add consts
 			m_ZoomLevel = 0.5f;
-		else if (m_ZoomLevel >= 3.0f)
+		else if (zoomLevel >= 3.0f)
 			m_ZoomLevel = 3.0f;
+		else
+			m_ZoomLevel = zoomLevel;
 
 		m_Camera.SetProjection(-m_AspectRation * m_ZoomLevel, m_AspectRation * m_ZoomLevel, -m_ZoomLevel, m_ZoomLevel);
-
-		return true;
 	}
 
 	bool OrhographicCameraController::OnResizedWindowEvent(WindowResizeEvent& e)

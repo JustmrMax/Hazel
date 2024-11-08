@@ -19,6 +19,7 @@ namespace Hazel
 
 	private:
 		bool OnScrolledEvent(MouseScrolledEvent& e);
+		void SetZoomLevel(float zoomLevel);
 		bool OnResizedWindowEvent(WindowResizeEvent& e);
 
 	private:
