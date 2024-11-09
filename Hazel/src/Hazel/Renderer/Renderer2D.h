@@ -2,6 +2,7 @@
 
 #include "Core/OrhographicCamera.h"
 #include "Shader.h"
+#include "Texture.h"
 
 namespace Hazel
 {
@@ -16,5 +17,7 @@ namespace Hazel
 
 		static void DrawQuad(glm::vec2& position, glm::vec2& size, glm::vec4& color);
 		static void DrawQuad(glm::vec3& position, glm::vec2& size, glm::vec4& color);
+		static void DrawQuad(glm::vec2& position, glm::vec2& size, Ref<Texture2D>& texture);
+		static void DrawQuad(glm::vec3& position, glm::vec2& size, Ref<Texture2D>& texture);
 	};
 }

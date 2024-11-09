@@ -50,6 +50,11 @@ namespace Hazel
 		glUseProgram(0);
 	}
 
+	void OpenGLShader::SetUniformInt(const std::string& name, int value)
+	{
+		UploadUniformInt(name, value);
+	}
+
 	void OpenGLShader::SetUniformMat3(const std::string& name, const glm::mat3& matrix)
 	{
 		UploadUniformMat3(name, matrix);

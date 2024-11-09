@@ -18,7 +18,7 @@ namespace Hazel
 		// Handling Camera movement
 
 		// When we zoom out we slow down the speedmovement YEAP
-		ts = ts * m_ZoomLevel;
+		ts = ts * m_ZoomLevel * 0.5f;
 
 		if (Input::IsKeyPressed(HZ_KEY_D))
 			m_CameraPosition.x += m_TranslationMovementSpeed * ts;

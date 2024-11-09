@@ -12,6 +12,7 @@ namespace Hazel
 	{
 		Ref<VertexArray> QuadVertexArray;
 		Ref<Shader> FlatColorShader;
+		Ref<Shader> TextureShader;
 	};
 
 	static Renderer2DStorage* s_Data;
@@ -21,17 +22,18 @@ namespace Hazel
 		s_Data = new Renderer2DStorage();
 
 		// VertexBuffer
-		float squareVertices[3 * 4] = {
-			-0.5f, -0.5f, 0.0f,
-			0.5f, -0.5f, 0.0f,
-			0.5f, 0.5f, 0.0f,
-			-0.5f, 0.5f, 0.0f,
+		float squareVertices[5 * 4] = {
+			-0.5f, -0.5f, 0.0f, 0.0f, 0.0f,
+			0.5f, -0.5f, 0.0f, 1.0f, 0.0f,
+			0.5f, 0.5f, 0.0f, 1.0f, 1.0f,
+			-0.5f, 0.5f, 0.0f, 0.0f, 1.0f
 		};
 
 		Hazel::Ref<Hazel::VertexBuffer> squareVB = Hazel::VertexBuffer::Create(squareVertices, sizeof(squareVertices));
 
 		Hazel::BufferLayout layout = {
-			{ Hazel::ShaderDataType::Float3, "a_Position" }
+			{ Hazel::ShaderDataType::Float3, "a_Position" },
+			{ Hazel::ShaderDataType::Float2, "a_TextureCoord" }
 		};
 		squareVB->SetLayout(layout);
 
@@ -47,7 +49,8 @@ namespace Hazel
 
 		// FlatColorShader
 		s_Data->FlatColorShader = Hazel::Shader::Create("assets/shaders/FlatColor.glsl");
-
+		// TextureShader
+		s_Data->TextureShader = Hazel::Shader::Create("assets/shaders/TextureShader.glsl");
 	}
 
 	void Renderer2D::Shutdown()
@@ -59,6 +62,10 @@ namespace Hazel
 	{
 		s_Data->FlatColorShader->Bind();
 		s_Data->FlatColorShader->SetUniformMat4("u_ViewProjection", camera.GetViewProjectionMatrix());
+
+		s_Data->TextureShader->Bind();
+		s_Data->TextureShader->SetUniformMat4("u_ViewProjection", camera.GetViewProjectionMatrix());
+		s_Data->TextureShader->SetUniformInt("u_Texture", 0);
 	}
 
 	void Renderer2D::EndScene()
@@ -79,6 +86,23 @@ namespace Hazel
 		s_Data->FlatColorShader->SetUniformMat4("u_Transform", transform);
 		s_Data->FlatColorShader->SetUniformFloat4("u_Color", color);
 
+		s_Data->QuadVertexArray->Bind();
+		RenderCommand::DrawIndexed(s_Data->QuadVertexArray);
+	}
+
+	void Renderer2D::DrawQuad(glm::vec2& position, glm::vec2& size, Ref<Texture2D>& texture)
+	{
+		DrawQuad(glm::vec3(position.x, position.y, 0.0f), size, texture);
+	}
+
+	void Renderer2D::DrawQuad(glm::vec3& position, glm::vec2& size, Ref<Texture2D>& texture)
+	{
+		glm::mat4 transform = glm::translate(glm::mat4(1.0f), position) * /* Rotation */ glm::scale(glm::mat4(1.0f), glm::vec3(size.x, size.y, 1.0f));
+
+		s_Data->TextureShader->Bind();
+		s_Data->TextureShader->SetUniformMat4("u_Transform", transform);
+
+		texture->Bind();
 		s_Data->QuadVertexArray->Bind();
 		RenderCommand::DrawIndexed(s_Data->QuadVertexArray);
 	}

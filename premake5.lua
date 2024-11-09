@@ -30,7 +30,7 @@ group "" -- End of group "Dependencies"
 
 project "Hazel"
 	location "Hazel"
-	kind "StaticLIb"
+	kind "StaticLib"
 	staticruntime "on"
 	language "C++"
 	cppdialect "C++17"

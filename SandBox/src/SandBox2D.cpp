@@ -15,6 +15,7 @@ SandBox2D::SandBox2D()
 
 void SandBox2D::OnAttach()
 {
+	m_CheckerboardTexture = Hazel::Texture2D::Create("assets/textures/checkerboard_1.png");
 }
 
 void SandBox2D::OnDettach()
@@ -33,8 +34,10 @@ void SandBox2D::OnUpdate(Hazel::Timestep ts)
 	Hazel::Renderer2D::BeginScene(m_CameraController.GetCamera());
 
 	Hazel::Renderer2D::DrawQuad(glm::vec2(1.0f, 1.0f), glm::vec2(1.0f, 1.0f), glm::vec4(0.3f, 0.5f, 0.9f, 1.0f));
-	Hazel::Renderer2D::DrawQuad(glm::vec2(0.0f, 0.0f), glm::vec2(0.3f, 1.1f), glm::vec4(0.9f, 0.5f, 0.9f, 1.0f));
+	Hazel::Renderer2D::DrawQuad(glm::vec2(2.0f, 7.0f), glm::vec2(0.3f, 1.1f), glm::vec4(0.9f, 0.5f, 0.9f, 1.0f));
 	Hazel::Renderer2D::DrawQuad(glm::vec2(-1.0f, 0.5f), glm::vec2(0.8f, 0.8f), glm::vec4(0.1f, 0.1f, 0.9f, 1.0f));
+
+	Hazel::Renderer2D::DrawQuad(glm::vec3(0.0f, 0.0f, -0.1f), glm::vec2(100.0f, 100.0f), m_CheckerboardTexture);
 
 	Hazel::Renderer2D::EndScene();
 }
