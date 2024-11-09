@@ -11,7 +11,7 @@ namespace Hazel
 	struct Renderer2DStorage
 	{
 		Ref<VertexArray> QuadVertexArray;
-		Ref<Shader> FlatColorShader;
+		Ref<Texture2D> WhiteTexture;
 		Ref<Shader> TextureShader;
 	};
 
@@ -47,10 +47,13 @@ namespace Hazel
 		s_Data->QuadVertexArray->AddVertexBuffer(squareVB);
 		s_Data->QuadVertexArray->SetIndexBuffer(squareIB);
 
-		// FlatColorShader
-		s_Data->FlatColorShader = Hazel::Shader::Create("assets/shaders/FlatColor.glsl");
 		// TextureShader
 		s_Data->TextureShader = Hazel::Shader::Create("assets/shaders/TextureShader.glsl");
+
+		// WhiteTexture
+		uint32_t color = 0xFFFFFFFF;
+		s_Data->WhiteTexture = Hazel::Texture2D::Create(1, 1);
+		s_Data->WhiteTexture->SetData(&color, sizeof(color));
 	}
 
 	void Renderer2D::Shutdown()
@@ -60,9 +63,6 @@ namespace Hazel
 
 	void Renderer2D::BeginScene(const OrhographicCamera& camera)
 	{
-		s_Data->FlatColorShader->Bind();
-		s_Data->FlatColorShader->SetUniformMat4("u_ViewProjection", camera.GetViewProjectionMatrix());
-
 		s_Data->TextureShader->Bind();
 		s_Data->TextureShader->SetUniformMat4("u_ViewProjection", camera.GetViewProjectionMatrix());
 		s_Data->TextureShader->SetUniformInt("u_Texture", 0);
@@ -82,10 +82,12 @@ namespace Hazel
 	{
 		glm::mat4 transform = glm::translate(glm::mat4(1.0f), position) * /* Rotation */ glm::scale(glm::mat4(1.0f), glm::vec3(size.x, size.y, 1.0f));
 
-		s_Data->FlatColorShader->Bind();
-		s_Data->FlatColorShader->SetUniformMat4("u_Transform", transform);
-		s_Data->FlatColorShader->SetUniformFloat4("u_Color", color);
+		s_Data->TextureShader->Bind();
+		s_Data->TextureShader->SetUniformFloat4("u_Color", color);
+		// Binding white shader for default
+		s_Data->WhiteTexture->Bind();
 
+		s_Data->TextureShader->SetUniformMat4("u_Transform", transform);
 		s_Data->QuadVertexArray->Bind();
 		RenderCommand::DrawIndexed(s_Data->QuadVertexArray);
 	}
@@ -100,9 +102,11 @@ namespace Hazel
 		glm::mat4 transform = glm::translate(glm::mat4(1.0f), position) * /* Rotation */ glm::scale(glm::mat4(1.0f), glm::vec3(size.x, size.y, 1.0f));
 
 		s_Data->TextureShader->Bind();
-		s_Data->TextureShader->SetUniformMat4("u_Transform", transform);
-
 		texture->Bind();
+		// Set white color for default
+		s_Data->TextureShader->SetUniformFloat4("u_Color", glm::vec4(1.0f, 0.8f, 1.0f, 0.5f));
+
+		s_Data->TextureShader->SetUniformMat4("u_Transform", transform);
 		s_Data->QuadVertexArray->Bind();
 		RenderCommand::DrawIndexed(s_Data->QuadVertexArray);
 	}
